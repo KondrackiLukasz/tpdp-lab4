@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <title>Hello World!</title>
+    <script src="../root/Build/Cesium/Cesium.js"></script>
+    <style>
+        @import url(../root/Build/Cesium/Widgets/widgets.css);
+
+        html, body, #cesiumContainer {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+<div id="cesiumContainer"></div>
+<script>
+    var viewer = new Cesium.Viewer('cesiumContainer');
+
+    // Poland
+    var Poland = viewer.entities.add({
+        name: 'Poland',
+        polygon: {
+            hierarchy: Cesium.Cartesian3.fromDegreesArray([
+                18.338667, 54.820366,
+                18.720155, 54.386322,
+                22.875648, 54.378387,
+                23.938365, 52.710955,
+                23.175389, 52.254606,
+                23.665873, 52.037227,
+                24.060986, 50.451036,
+                22.848399, 49.042572,
+                19.919117, 49.238664,
+                16.730968, 50.137695,
+                14.878027, 50.900002,
+                14.264922, 53.923576
+            ]),
+            material: Cesium.Color.WHITE.withAlpha(0.5),
+            outline: true,
+            outlineColor: Cesium.Color.BLACK
+        }
+    });
+    viewer.zoomTo(Poland);
+
+    // Ellipse
+    var entity = viewer.entities.add({
+        position: Cesium.Cartesian3.fromDegrees(-3.695879, 40.407174),
+        ellipse: {
+            semiMinorAxis: 250000.0,
+            semiMajorAxis: 400000.0,
+            material: Cesium.Color.BLUE.withAlpha(0.5)
+        }
+    });
+    entity.ellipse.material = 'http://localhost:8080/Apps/espana.png';
+
+    // Borg cube
+    var cube = viewer.entities.add({
+        name: 'Cube',
+        position: Cesium.Cartesian3.fromDegrees(2.3488000, 48.8534100, 100000.0),
+        box: {
+            dimensions: new Cesium.Cartesian3(300000.0, 300000.0, 300000.0),
+            material: 'http://localhost:8080/Apps/student.png'
+        }
+    });
+    viewer.zoomTo(cube);
+
+    // Green beam from Borg cube to Gdansk
+    var greenBeam = viewer.entities.add({
+        polyline: {
+            positions: Cesium.Cartesian3.fromDegreesArray([
+                2.3488000, 48.8534100,
+                18.640305, 54.352025
+            ]),
+            width: 10,
+            material: Cesium.Color.GREEN
+        }
+    });
+
+    viewer.clock.startTime = start.clone();
+    viewer.clock.stopTime = Cesium.JulianDate.addHours(start, 360, new Cesium.JulianDate());
+    viewer.clock.currentTime = start.clone();
+    viewer.clock.clockRange = Cesium.ClockRange.LOOP_STOP;
+
+    var viewerPromise = viewer.flyTo(cube);
+    viewerPromise.then(function () {
+        viewer.trackedEntity = cube;
+    });
+</script>
+</body>
+</html>
+
