@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Use correct character set. -->
+  <meta charset="utf-8">
+  <!-- Tell IE to use the latest, best version. -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <!-- Make the application on mobile take up the full browser screen and disable user scaling. -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+  <title>Hello World!</title>
+  <script src="../Build/Cesium/Cesium.js"></script>
+  <style>
+      @import url(../Build/Cesium/Widgets/widgets.css);
+      html, body, #cesiumContainer {
+          width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden;
+      }
+  </style>
+</head>
+<body>
+  <div id="cesiumContainer"></div>
+  <script>
+    var viewer = new Cesium.Viewer('cesiumContainer');
+	
+	//-------------------MAPA POLSKI
+	//var Poland = viewer.entities.add({
+	//	 name: 'Poland',
+	//	 polygon: {
+	//		hierarchy: Cesium.Cartesian3.fromDegreesArray([
+	//			18.338667,54.820366,
+	//			18.720155,54.386322,
+	//			22.875648,54.378387,
+	//			23.938365,52.710955,
+	//			23.175389,52.254606,
+	//			23.665873,52.037227,
+	//			24.060986,50.451036,
+	//			22.848399,49.042572,
+	//			19.919117,49.238664,
+	//			16.730968,50.137695,
+	//			14.878027,50.900002,
+	//			14.264922,53.923576]),
+	//		material: Cesium.Color.WHITE.withAlpha(0.5),
+	//		outline: true,
+	//		outlineColor: Cesium.Color.BLACK
+	//		}
+	//	});
+		
+	//viewer.zoomTo(Poland);
+	
+	//------------------ELIPSA
+	var entity = viewer.entities.add({
+		position: Cesium.Cartesian3.fromDegrees(-3.695879, 40.407174),
+		ellipse: {
+			semiMinorAxis: 250000.0,
+			semiMajorAxis: 400000.0,
+			material: Cesium.Color.BLUE.withAlpha(0.5)
+		}
+	});
+	
+	//viewer.zoomTo(viewer.entities);
+	var ellipse = entity.ellipse;
+	ellipse.material = 'http://localhost:8080/Apps/espana.png';
+	
+	
+	//-------------------KOSTKA
+	var cube = viewer.entities.add({
+		name: 'Cube',
+		position: Cesium.Cartesian3.fromDegrees(18.610520, 54.371670,  30.0),
+		box: {
+			dimensions: new Cesium.Cartesian3(50.0, 50.0, 50.0)
+		}
+	});
+	
+	cube.box.material =  'http://localhost:8080/Apps/student.png';
+	viewer.zoomTo(cube);
+	
+	//-------------------LINIA (Paryz - Gdańsk)
+	var myPolyline = new Cesium.GeometryInstance({
+		geometry : new Cesium.PolylineGeometry({
+		positions : Cesium.Cartesian3.fromDegreesArrayHeights([
+			2.3488000, 48.8534100, 0.0,
+			-2, 15.58, 0.0
+		]),
+		width: 5.0,
+		arcType : Cesium.ArcType.NONE,
+		vertexFormat : Cesium.PolylineColorAppearance.VERTEX_FORMAT }),
+		attributes : {
+		color : Cesium.ColorGeometryInstanceAttribute.fromColor(Cesium.Color.GREEN)
+		}
+	});
+	
+	viewer.scene.primitives.add(new Cesium.Primitive({
+		geometryInstances : myPolyline,
+		appearance : new Cesium.PolylineColorAppearance()
+	}));
+	
+	//--------------------SCENERIA
+	//var layers = viewer.imageryLayers;
+	//var blackMarble = layers.addImageryProvider(new Cesium.IonImageryProvider({ assetId:
+	//	3812 }));
+	//blackMarble.alpha = 0.5;
+	//blackMarble.brightness = 2.0;
+	
+	//---------------------TEREN
+	var terrainProvider = Cesium.createWorldTerrain({
+		requestVertexNormals: true,
+		requestWaterMask: true
+	});
+	viewer.terrainProvider = terrainProvider;
+	
+	viewer.scene.globe.enableLighting = true;
+	
+	//-----------------------ANIMACJA
+	var modelMatrix = Cesium.Transforms.eastNorthUpToFixedFrame(
+	 Cesium.Cartesian3.fromDegrees(18.59058, 54.38783, 2000.0));
+	 
+	 var model = viewer.scene.primitives.add( Cesium.Model.fromGltf({
+		url :
+			//'http://localhost:8080/Apps/SampleData/models/GroundVehicle/GroundVehicle.glb',
+			'http://localhost:8080/Apps/SampleData/models/CesiumAir/Cesium_Air.glb',
+		modelMatrix : modelMatrix,
+		scale : 200.0
+	 }));
+
+	 viewer.zoomTo(Poland);
+	 
+  </script>
+</body>
+</html>

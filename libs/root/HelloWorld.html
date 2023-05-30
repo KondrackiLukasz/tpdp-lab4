@@ -23,7 +23,6 @@
 <script>
     var viewer = new Cesium.Viewer('cesiumContainer');
 
-    // Poland
     var Poland = viewer.entities.add({
         name: 'Poland',
         polygon: {
@@ -48,7 +47,6 @@
     });
     viewer.zoomTo(Poland);
 
-    // Ellipse
     var entity = viewer.entities.add({
         position: Cesium.Cartesian3.fromDegrees(-3.695879, 40.407174),
         ellipse: {
@@ -59,7 +57,6 @@
     });
     entity.ellipse.material = 'http://localhost:8080/Apps/espana.png';
 
-    // Borg cube
     var cube = viewer.entities.add({
         name: 'Cube',
         position: Cesium.Cartesian3.fromDegrees(2.3488000, 48.8534100, 100000.0),
@@ -70,7 +67,6 @@
     });
     viewer.zoomTo(cube);
 
-    // Green beam from Borg cube to Gdansk
     var greenBeam = viewer.entities.add({
         polyline: {
             positions: Cesium.Cartesian3.fromDegreesArray([
